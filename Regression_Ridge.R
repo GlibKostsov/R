@@ -32,27 +32,28 @@ Y<-Volume
 J(X,Volume)
 J<-function(X,Y,Theta){
   n<-nrow(Y)
-  J<-1/(2*n)*t(X%*%Theta-Y)%*%(X%*%Theta-Y)+(lambda/2)*sum(Theta)^2
+  J<-1/(2*n)*t(X%*%Theta-Y)%*%(X%*%Theta-Y)+(lambda/2)*t(Theta)%*%Theta
   return(J)
 }
 
 
 ###Descente de gradient 
 I<-as.matrix(rep(1,length(Theta)))
-pas<-0.001
+pas<-0.00001
 Theta<-as.matrix(c(rep(0,3)))
 
 #Stat<-as.data.frame(matrix(vector(), 0, 3, dimnames=list(c(), c("J","Err","Comp"))))
-
+Erreur<-1
 Compteur<-0
 Erreurs<-c()
 Js<-c()
 
-while(Erreur>0.01){
+while(Erreur>0.0001){
   Compteur<-Compteur+1
-  Jderiv<- (t(X)%*%X%*%Theta-t(X)%*%Volume + n*lambda*Theta
+  Jderiv<- (t(X)%*%X%*%Theta -t(X)%*%Volume)+ n*lambda*Theta
   tempTheta<-Theta - pas*Jderiv
-  Erreur<-sum(Jderiv^2)
+  
+  Erreur<-t(Jderiv)%*%Jderiv
   Erreurs[Compteur]<-Erreur
   Js[Compteur]<-J(X,Volume,Theta)
   Theta<-tempTheta
