@@ -64,10 +64,14 @@ while(Erreur>0.0001){
 #J en fonction de nomre d'iterations 
 plot(1:length(Js),Js,type = 'l')
 
+
 ###Resolution package GLMNET (descente de gradient conjugue)
 
 install.packages("glmnet")
 library(glmnet)
 
 
+regressionglmnet<-glmnet(X[,2:3],Volume/sd(Volume),family = 'gaussian',alpha =0, intercept = FALSE, lambda= lambda, standardize  = FALSE)
+
+regressionglmnet$beta
 
