@@ -37,7 +37,7 @@ J<-function(X,Y,Theta){
 }
 
 
-###Descente de gradient 
+###Resolution Descente de gradient 
 I<-as.matrix(rep(1,length(Theta)))
 pas<-0.00001
 Theta<-as.matrix(c(rep(0,3)))
@@ -61,11 +61,13 @@ while(Erreur>0.0001){
 }
 
 
+#J en fonction de nomre d'iterations 
+plot(1:length(Js),Js,type = 'l')
+
+###Resolution package GLMNET (descente de gradient conjugue)
+
+install.packages("glmnet")
+library(glmnet)
 
 
-
-
-
-
-#tepmTheta<-Theta*(I-n*lambda*pas) - pas*Jderiv
 
