@@ -38,11 +38,10 @@ J<-function(X,Y,Theta){
 
 
 ###Resolution Descente de gradient 
-I<-as.matrix(rep(1,length(Theta)))
+
 pas<-0.00001
 Theta<-as.matrix(c(rep(0,3)))
 
-#Stat<-as.data.frame(matrix(vector(), 0, 3, dimnames=list(c(), c("J","Err","Comp"))))
 Erreur<-1
 Compteur<-0
 Erreurs<-c()
@@ -75,3 +74,33 @@ regressionglmnet<-glmnet(X[,2:3],Volume/sd(Volume),family = 'gaussian',alpha =0,
 
 regressionglmnet$beta
 
+
+###Descente gradient sas intercept , standardization des Y
+
+#I<-as.matrix(rep(1,length(Theta)))
+pas<-0.00001
+Theta<-as.matrix(c(rep(0,2)))
+
+#Stat<-as.data.frame(matrix(vector(), 0, 3, dimnames=list(c(), c("J","Err","Comp"))))
+Erreur<-1
+Compteur<-0
+Erreurs<-c()
+Js<-c()
+
+while(Erreur>0.0001){
+  Compteur<-Compteur+1
+  Jderiv<- (t(X[,2:3])%*%X[,2:3]%*%Theta -t(X[,2:3])%*%Volume/sd(Volume))+ n*lambda*Theta
+  tempTheta<-Theta - pas*Jderiv
+  
+  Erreur<-t(Jderiv)%*%Jderiv
+  Erreurs[Compteur]<-Erreur
+  Js[Compteur]<-J(X[,2:3],Volume,Theta)
+  Theta<-tempTheta
+  
+}
+
+###Comparaison resultats Descente de gradient / glmnet
+
+Theta#gradient
+
+regressionglmnet$beta#glmnet
