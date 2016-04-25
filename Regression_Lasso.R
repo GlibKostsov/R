@@ -92,26 +92,72 @@ while(Erreur>0.001){
 
 ###############################################
 
-###Gradient dimensions >1 avec la fonction Slp
-#a finir
+###Gradient dimensions >1 avec la fonction Slam
 
 
-Compteur<-0
-pas<-0.001
-Erreur<- 1
 
-while(Erreur>0.001){
-  Compteur<-Compteur+1
-  Jderiv<-Theta-Y+lambda*sign(Theta)
-  tempTheta<-Theta-pas*Jderiv
-  Erreur<-Jderiv^2
+#Fonction a minimiser
+Jfunc<-function(X,Y,Theta,lambda){
   
-  Theta<-tempTheta
+  J<-(1/2*n)*(t(X%*%Theta-Volume)%*%(X%*%Theta-Volume))+sum(lambda/2*(abs(Theta)))
+  return(J)
 }
 
 
 
+Slam<-function(z,lambda,L){
+  d<-length(z)
+  res<-matrix(0,d,1)
+  for (i in 1:d){
+    res[i] <-sign(z[i])*max(abs(z[i])-lambda/L,0)
+  }
+  return(res)
+  
+}
+
+z<-as.matrix(c(2,4,-10))
+
+Slam<-function(z,lambda,L){
+    res <-(abs(z)-lambda/L)
+    res<-replace(res,which(res<0),0)
+  return(sign(z)*res)
+}
+?replace()
+
+L<-max(eigen(t(X)%*%X)$values)
+
+
+pas<-1/L
+
+Theta<-as.matrix(c(0,0,0)
+
+lambda<-0.5
+
+Erreur<-1
+
+counter<-0
+while(Erreur>0.0001){
+  
+  
+  counter<-counter+1
+  Jderiv<- (t(X)%*%X%*%Theta-t(X)%*%Volume)
+  tempTheta<-Theta-pas*Jderiv
+  Theta<- Slam(tempTheta,pas*lambda,L)
+  
+  Erreur<-t(Jderiv)%*%Jderiv
+
+  if (counter %% 50000==0) {print(c(Jfunc(X,Volume,Theta,lambda),Erreur,Theta)) }
+  
+}
 
 
 
+#Verification avec glmnet
+reg<-glmnet(t(X)%*%X,t(X)%*%Volume,family = "gaussian",alpha =1,intercept = TRUE, lambda = lambda, standardize = FALSE)
 
+
+#Coeficiets de regression glmnet
+reg$beta
+
+#Coeficients de regression par descent du gradient
+Theta
