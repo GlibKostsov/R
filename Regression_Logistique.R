@@ -1,6 +1,6 @@
 
 
-#Logistic regresion 
+#Logistic regresion    
 
 
 install.packages("MASS")
