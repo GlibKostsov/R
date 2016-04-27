@@ -49,6 +49,7 @@ for(i in pas)
     tempTheta<-Theta-i*Jder
     Err<-sqrt(t(Jder)%*%Jder)
     
+    
     Theta<-tempTheta
    
     #Test imprime les valeurs de fonction a minimiser et erreur 

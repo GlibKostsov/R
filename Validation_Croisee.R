@@ -39,17 +39,12 @@ EvaluationErreur(0.00007)
 #Plot - Erreurs en fonction de lambda
 
 lambda<-seq(0.00005,0.0004,by = 0.00001)
-T<-c()
-counter<-0
 
-for (i in lambda){
-  counter<-counter+1 
-  T[counter] <- EvaluationErreur(i)
-}
+T<-lapply(lambda,EvaluationErreur)
 
 plot(lambda,T)
 
-#Minimom de la fonction sur l'intervalle [0,1]
+#Minimum de la fonction sur l'intervalle [0,1]
 
 MinimomLambda<-optimize(EvaluationErreur,lower= 0, upper = 1)$minimum
 MinimomEvaluationErreur<-optimize(EvaluationErreur,lower= 0, upper = 1)$objective
@@ -58,4 +53,3 @@ MinimomEvaluationErreur<-optimize(EvaluationErreur,lower= 0, upper = 1)$objectiv
 points(MinimomLambda,MinimomEvaluationErreur, col = 'red',pch=20)
 
 
-getwd()
