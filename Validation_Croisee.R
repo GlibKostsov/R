@@ -2,7 +2,6 @@
 ######VALIDATION CROISEE
 ##Regression Ridge
 
-
 head(dataTrees)<-trees
 
 n<-nrow(dataTrees)
